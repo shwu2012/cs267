@@ -4,19 +4,22 @@ public class Record {
 
 	private static final int NUM_OF_FEATURES = 136;
 
-	private int relevance;
-	private int queryId;
-	private String csvInput;
-	private double[] features;
+	private int relevance = -1;
+	private int queryId = -1;
+	private String csvInput = null;
+	private double[] features = new double[NUM_OF_FEATURES];
 
-	public Record(String csvInputLine) {
+	public Record(String csvInputLine, boolean hasQueryId) {
 		String[] fields = csvInputLine.split(",");
 		relevance = Integer.parseInt(fields[0]);
-		queryId = Integer.parseInt(fields[1]);
+		int featuresIndexOffset = 1;
+		if (hasQueryId) {
+			queryId = Integer.parseInt(fields[1]);
+			featuresIndexOffset = 2;
+		}
 		csvInput = csvInputLine;
-		features = new double[NUM_OF_FEATURES];
 		for (int i = 0; i < NUM_OF_FEATURES; i++) {
-			features[i] = Double.parseDouble(fields[i + 2]);
+			features[i] = Double.parseDouble(fields[i + featuresIndexOffset]);
 		}
 	}
 
@@ -48,9 +51,11 @@ public class Record {
 	// doesn't output QID
 	public String difference(Record b) {
 		String toReturn = "";
+		// Output label: 1 or -1.
 		toReturn += this.relevance - b.getRelevance() > 0 ? 1 : -1;
+		// Does not output queryId.
+		// Output features.
 		for (int i = 0; i < features.length; i++) {
-
 			toReturn += ",";
 			// boolean values 95-99 produce categorical {-1, 0 , 1} cast to int
 			// so they are enum for H20

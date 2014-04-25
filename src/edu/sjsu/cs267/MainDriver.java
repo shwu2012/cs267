@@ -56,7 +56,7 @@ public class MainDriver extends Configured implements Tool {
 			}
 
 			for (String row : rows) {
-				Record dataRecord = new Record(row);
+				Record dataRecord = new Record(row, false);
 				if (dataRecord.getRelevance() == 1) {
 					reporter.incrCounter(Counters.POSITIVE_DATA_POINTS, 1);
 				} else if (dataRecord.getRelevance() == -1) {

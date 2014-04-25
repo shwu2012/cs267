@@ -133,7 +133,7 @@ public class DataPrep {
 		int[][] ratingCount = new int[20000][];
 		while (line != null) {
 			prevQID = currQID;
-			currRecord = new Record(line);
+			currRecord = new Record(line, true);
 			currQID = currRecord.getQueryId();
 			if (currQID != prevQID) {
 				int[] scoreCount = { 0, 0, 0, 0, 0 };
@@ -186,7 +186,7 @@ public class DataPrep {
 
 		while (line != null) {
 			prevQID = currQID;
-			currRecord = new Record(line);
+			currRecord = new Record(line, true);
 			currQID = currRecord.getQueryId();
 			if (currQID != prevQID) {
 				if (queryNum % 500 == 0)
@@ -233,7 +233,7 @@ public class DataPrep {
 		int numQueries = 0;
 		while (line != null) {
 			prevQID = currQID;
-			currRecord = new Record(line);
+			currRecord = new Record(line, true);
 			currQID = currRecord.getQueryId();
 			if (currQID != prevQID) {
 				numQueries++;
