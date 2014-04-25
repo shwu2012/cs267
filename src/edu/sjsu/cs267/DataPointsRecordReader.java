@@ -55,10 +55,13 @@ public class DataPointsRecordReader implements RecordReader<IntWritable, Text> {
 		// Get the next line.
 		int index = 0;
 		StringBuilder sb = new StringBuilder();
-		while (lineReader.next(lineKey, lineValue) && index < numRows) {
+		while (lineReader.next(lineKey, lineValue)) {
 			sb.append(lineValue.toString());
 			sb.append('\n');
 			index++;
+			if (index >= numRows) {
+			    break;
+			}
 		}
 
 		if (index == 0) {

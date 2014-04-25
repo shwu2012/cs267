@@ -18,6 +18,6 @@ public class DataPointsInputFormat extends FileInputFormat<IntWritable, Text> {
 			JobConf job, Reporter reporter) throws IOException {
 
 		reporter.setStatus(input.toString());
-		return new DataPointsRecordReader(job, (FileSplit) input, 1000);
+		return new DataPointsRecordReader(job, (FileSplit) input, 2000);
 	}
 }

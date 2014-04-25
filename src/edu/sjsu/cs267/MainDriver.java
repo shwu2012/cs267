@@ -83,6 +83,7 @@ public class MainDriver extends Configured implements Tool {
 				throws IOException {
 			int sum = 0;
 			while (values.hasNext()) {
+			    values.next();
 				sum++;
 			}
 			output.collect(CONSTANT_ONE,
@@ -99,7 +100,14 @@ public class MainDriver extends Configured implements Tool {
 		conf.setOutputValueClass(Text.class);
 
 		conf.setMapperClass(Map.class);
-		conf.setCombinerClass(Reduce.class);
+	
+        // Set number of reduce tasks to 0 for map-only jobs.
+		//conf.setNumReduceTasks(0);
+
+        // Combiners can only be used on the reduce-functions that are
+        // 1. commutative(a.b = b.a), and
+        // 2. associative {a.(b.c) = (a.b).c}.
+		//conf.setCombinerClass(Reduce.class);
 		conf.setReducerClass(Reduce.class);
 
 		conf.setInputFormat(DataPointsInputFormat.class);
