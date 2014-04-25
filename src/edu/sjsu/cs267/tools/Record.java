@@ -2,6 +2,8 @@ package edu.sjsu.cs267.tools;
 
 public class Record {
 
+	private static final int NUM_OF_FEATURES = 136;
+
 	private int relevance;
 	private int queryId;
 	private String csvInput;
@@ -12,53 +14,41 @@ public class Record {
 		relevance = Integer.parseInt(fields[0]);
 		queryId = Integer.parseInt(fields[1]);
 		csvInput = csvInputLine;
-		features = new double[136];
-		for (int i = 0; i < 136; i++) {
+		features = new double[NUM_OF_FEATURES];
+		for (int i = 0; i < NUM_OF_FEATURES; i++) {
 			features[i] = Double.parseDouble(fields[i + 2]);
 		}
 	}
 
-	public void SetRelevance(int newRelevance) {
+	public void setRelevance(int newRelevance) {
 		relevance = newRelevance;
 	}
 
-	public int GetRelevance() {
+	public int getRelevance() {
 		return relevance;
 	}
 
-	public void SetQueryID(int newQID) {
+	public void setQueryId(int newQID) {
 		queryId = newQID;
 	}
 
-	public int GetQueryId() {
+	public int getQueryId() {
 		return queryId;
 	}
 
-	public double GetFeatureVal(int i) {
-		if (i >= 0 && i < features.length)
-			return features[i];
-		else {
-			System.out
-					.println("I should really learn about exception: out of bounds in GetFeatureVal call, i = "
-							+ i);
-			return 0;
-		}
+	public double getFeatureVal(int i) {
+		return features[i];
 	}
 
-	public void SetFeatureVal(int i, double val) {
-		if (i > 0 && i < features.length)
-			features[i] = val;
-		else {
-			System.out
-					.println("I should really learn about exception: out of bounds in SetFeatureVal call");
-		}
+	public void setFeatureVal(int i, double val) {
+		features[i] = val;
 	}
 
 	// a.Difference(b) -> a - b for printing
 	// doesn't output QID
-	public String Difference(Record b) {
+	public String difference(Record b) {
 		String toReturn = "";
-		toReturn += this.relevance - b.GetRelevance() > 0 ? 1 : -1;
+		toReturn += this.relevance - b.getRelevance() > 0 ? 1 : -1;
 		for (int i = 0; i < features.length; i++) {
 
 			toReturn += ",";
@@ -66,9 +56,9 @@ public class Record {
 			// so they are enum for H20
 			if (i > 94 && i < 100)
 				toReturn += (int) (this.features[i])
-						- (int) (b.GetFeatureVal(i));
+						- (int) (b.getFeatureVal(i));
 			else
-				toReturn += this.features[i] - b.GetFeatureVal(i);
+				toReturn += this.features[i] - b.getFeatureVal(i);
 		}
 
 		return toReturn;
