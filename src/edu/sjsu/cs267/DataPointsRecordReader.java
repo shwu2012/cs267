@@ -60,11 +60,17 @@ public class DataPointsRecordReader implements RecordReader<IntWritable, Text> {
 			sb.append('\n');
 			index++;
 		}
+
+		if (index == 0) {
+			return false;
+		}
+
 		// Remove last line-feed.
 		sb.setLength(sb.length() - 1);
-		key.set(index); // Key is number of data points.
-		value.set(sb.toString()); // Value is the data points separated by
-									// line-feed.
+		// Key is number of data points.
+		key.set(index);
+		// Value is the data points separated by line-feed.
+		value.set(sb.toString());
 		return true;
 	}
 
