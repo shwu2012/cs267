@@ -16,7 +16,7 @@ public class Pair<T1, T2> {
 
 	@Override
 	public String toString() {
-		return String.format("{ first: %s, second: %s }", first.toString(),
+		return String.format("{first: %s, second: %s}", first.toString(),
 				second.toString());
 	}
 }

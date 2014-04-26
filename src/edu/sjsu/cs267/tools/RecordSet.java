@@ -1,5 +1,6 @@
 package edu.sjsu.cs267.tools;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,5 +55,28 @@ public class RecordSet {
 		for (WeightedRecord record : records) {
 			record.setWeight(record.getWeight() / sumWeight);
 		}
+	}
+
+	public void equalizeWeights() {
+		for (WeightedRecord record : records) {
+			record.setWeight(1.0);
+		}
+		normalizeWeights();
+	}
+
+	public List<Double> getWeights() {
+		List<Double> weights = new ArrayList<Double>(getNumRecords());
+		for (WeightedRecord record : records) {
+			weights.add(record.getWeight());
+		}
+		return weights;
+	}
+
+	public List<Integer> getClasses() {
+		List<Integer> classes = new ArrayList<Integer>(getNumRecords());
+		for (WeightedRecord record : records) {
+			classes.add(record.getRelevance());
+		}
+		return classes;
 	}
 }

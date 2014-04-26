@@ -18,7 +18,7 @@ public class Triple<T1, T2, T3> {
 
 	@Override
 	public String toString() {
-		return String.format("{ first: %s, second: %s, third: %s }",
+		return String.format("{first: %s, second: %s, third: %s}",
 				first.toString(), second.toString(), third.toString());
 	}
 }

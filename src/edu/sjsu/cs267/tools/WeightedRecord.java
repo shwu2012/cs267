@@ -1,6 +1,5 @@
 package edu.sjsu.cs267.tools;
 
-
 public class WeightedRecord extends Record {
 
 	private double weight = 1.0;
@@ -21,6 +20,7 @@ public class WeightedRecord extends Record {
 
 	@Override
 	public String toString() {
-		return String.format("(%f) %s", weight, super.toString());
+		return String
+				.format("{weight: %f, data: %s}", weight, super.toString());
 	}
 }

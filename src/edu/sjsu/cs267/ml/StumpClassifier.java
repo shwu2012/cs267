@@ -8,7 +8,6 @@ import edu.sjsu.cs267.tools.Triple;
 import edu.sjsu.cs267.tools.WeightedRecord;
 
 public class StumpClassifier {
-	private static final int FEATURE_VALUE_RANGE_STEPS = 20;
 
 	enum SplitType {
 		GREATER_THAN, LESS_THAN
@@ -66,7 +65,7 @@ public class StumpClassifier {
 	}
 
 	public static Triple<StumpClassifier, Double, List<Integer>> build(
-			RecordSet records) {
+			RecordSet records, int featureValueRangeSteps) {
 		StumpClassifier bestStump = new StumpClassifier();
 		int numRows = records.getNumRecords();
 		int numFeatures = records.getNumFeatures();
@@ -77,9 +76,9 @@ public class StumpClassifier {
 			// [min_value, max_value]
 			double[] valueRange = records.getFeatureValueRange(i);
 			double stepSize = (valueRange[1] - valueRange[0])
-					/ FEATURE_VALUE_RANGE_STEPS;
+					/ featureValueRangeSteps;
 			// loop over all range in current dimension
-			for (int j = -1; j <= FEATURE_VALUE_RANGE_STEPS; j++) {
+			for (int j = -1; j <= featureValueRangeSteps; j++) {
 				// go over less-than and greater-than
 				for (SplitType ineqType : SplitType.values()) {
 					double threshVal = valueRange[0] + j * stepSize;
@@ -87,10 +86,12 @@ public class StumpClassifier {
 							threshVal, ineqType);
 					double weightedError = calculateWeightedError(records,
 							predictedVals);
-					System.out.printf(
-							"split-index %d, threshold: %f, ineq-type: %s,\n"
-									+ "minError: %f, weightedError: %f\n", i,
-							threshVal, ineqType, minError, weightedError);
+					/*
+					 * System.out.printf(
+					 * "split-index %d, threshold: %f, ineq-type: %s,\n" +
+					 * "minError: %f, weightedError: %f\n", i, threshVal,
+					 * ineqType, minError, weightedError);
+					 */
 					if (weightedError < minError) {
 						minError = weightedError;
 						bestEstimatedClasses = predictedVals;
@@ -119,7 +120,7 @@ public class StumpClassifier {
 	@Override
 	public String toString() {
 		return String.format(
-				"{splitFeatureIndex=%d, threshold=%f, splitType=%s}",
+				"{splitFeatureIndex: %d, threshold: %f, splitType: %s}",
 				splitFeatureIndex, threshold, splitType);
 	}
 
@@ -137,7 +138,7 @@ public class StumpClassifier {
 		records.append(new WeightedRecord("-1,29.3,4,1.0,1.1", false,
 				numFeatures, 1.0));
 		records.normalizeWeights();
-		System.out.println(StumpClassifier.build(records));
+		System.out.println(StumpClassifier.build(records, 20));
 	}
 
 }
