@@ -21,6 +21,7 @@ import org.apache.hadoop.mapred.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+import edu.sjsu.cs267.tools.DataPrep;
 import edu.sjsu.cs267.tools.Record;
 
 public class MainDriver extends Configured implements Tool {
@@ -56,7 +57,8 @@ public class MainDriver extends Configured implements Tool {
 			}
 
 			for (String row : rows) {
-				Record dataRecord = new Record(row, false);
+				Record dataRecord = new Record(row, false,
+						DataPrep.NUM_FEATURES);
 				if (dataRecord.getRelevance() == 1) {
 					reporter.incrCounter(Counters.POSITIVE_DATA_POINTS, 1);
 				} else if (dataRecord.getRelevance() == -1) {
@@ -83,7 +85,7 @@ public class MainDriver extends Configured implements Tool {
 				throws IOException {
 			int sum = 0;
 			while (values.hasNext()) {
-			    values.next();
+				values.next();
 				sum++;
 			}
 			output.collect(CONSTANT_ONE,
@@ -100,14 +102,14 @@ public class MainDriver extends Configured implements Tool {
 		conf.setOutputValueClass(Text.class);
 
 		conf.setMapperClass(Map.class);
-	
-        // Set number of reduce tasks to 0 for map-only jobs.
-		//conf.setNumReduceTasks(0);
 
-        // Combiners can only be used on the reduce-functions that are
-        // 1. commutative(a.b = b.a), and
-        // 2. associative {a.(b.c) = (a.b).c}.
-		//conf.setCombinerClass(Reduce.class);
+		// Set number of reduce tasks to 0 for map-only jobs.
+		// conf.setNumReduceTasks(0);
+
+		// Combiners can only be used on the reduce-functions that are
+		// 1. commutative(a.b = b.a), and
+		// 2. associative {a.(b.c) = (a.b).c}.
+		// conf.setCombinerClass(Reduce.class);
 		conf.setReducerClass(Reduce.class);
 
 		conf.setInputFormat(DataPointsInputFormat.class);

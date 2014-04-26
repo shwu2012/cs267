@@ -13,11 +13,14 @@ import org.apache.hadoop.mapred.Reporter;
 
 public class DataPointsInputFormat extends FileInputFormat<IntWritable, Text> {
 
+	private static final int SUB_DATA_SET_SIZE = 2000;
+
 	@Override
 	public RecordReader<IntWritable, Text> getRecordReader(InputSplit input,
 			JobConf job, Reporter reporter) throws IOException {
 
 		reporter.setStatus(input.toString());
-		return new DataPointsRecordReader(job, (FileSplit) input, 2000);
+		return new DataPointsRecordReader(job, (FileSplit) input,
+				SUB_DATA_SET_SIZE);
 	}
 }

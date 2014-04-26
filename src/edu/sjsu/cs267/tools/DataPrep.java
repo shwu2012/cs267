@@ -38,6 +38,8 @@ public class DataPrep {
 			+ "\t *n is the max number of documents per relevance rating for each query*\n"
 			+ "4: Prepare Pairwise Data from CSV ... Requires: <input filepath> <output filepath>\n\n";
 
+	public static final int NUM_FEATURES = 136;
+
 	public static void main(String[] args) throws Exception {
 
 		System.out.println(args.length);
@@ -133,7 +135,7 @@ public class DataPrep {
 		int[][] ratingCount = new int[20000][];
 		while (line != null) {
 			prevQID = currQID;
-			currRecord = new Record(line, true);
+			currRecord = new Record(line, true, NUM_FEATURES);
 			currQID = currRecord.getQueryId();
 			if (currQID != prevQID) {
 				int[] scoreCount = { 0, 0, 0, 0, 0 };
@@ -186,7 +188,7 @@ public class DataPrep {
 
 		while (line != null) {
 			prevQID = currQID;
-			currRecord = new Record(line, true);
+			currRecord = new Record(line, true, NUM_FEATURES);
 			currQID = currRecord.getQueryId();
 			if (currQID != prevQID) {
 				if (queryNum % 500 == 0)
@@ -233,7 +235,7 @@ public class DataPrep {
 		int numQueries = 0;
 		while (line != null) {
 			prevQID = currQID;
-			currRecord = new Record(line, true);
+			currRecord = new Record(line, true, NUM_FEATURES);
 			currQID = currRecord.getQueryId();
 			if (currQID != prevQID) {
 				numQueries++;
@@ -249,9 +251,9 @@ public class DataPrep {
 						if (a.getRelevance() != b.getRelevance()) {
 							// divide up between +1/-1 relevance rankings
 							if (j % 2 == 0)
-								out.println(a.difference(b));
+								out.println(a.difference(b).toString());
 							else
-								out.println(b.difference(a));
+								out.println(b.difference(a).toString());
 						}
 					}
 
