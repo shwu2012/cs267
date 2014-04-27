@@ -24,18 +24,7 @@ public class AdaBoostClassifier {
 
 	@Override
 	public String toString() {
-		if (weakClassifiers == null) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder();
-		for (Pair<Double, StumpClassifier> c : weakClassifiers) {
-			sb.append(c.toString());
-			sb.append('\n');
-		}
-		if (sb.length() > 1) {
-			sb.setLength(sb.length() - 1);
-		}
-		return sb.toString();
+		return weakClassifiers.toString();
 	}
 
 	public List<Pair<Double, StumpClassifier>> getSortedWeakClassifiersByWeight() {

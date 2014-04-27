@@ -9,7 +9,7 @@ import edu.sjsu.cs267.tools.WeightedRecord;
 
 public class StumpClassifier {
 
-	enum SplitType {
+	public enum SplitType {
 		GREATER_THAN, LESS_THAN
 	}
 
