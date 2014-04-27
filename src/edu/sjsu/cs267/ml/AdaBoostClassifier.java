@@ -65,7 +65,7 @@ public class AdaBoostClassifier {
 			aggregateEstimatedClasses.add(0.0);
 		}
 		for (int i = 0; i < numIterations; i++) {
-			System.out.println("recordset weights: " + records.getWeights());
+			//System.out.println("recordset weights: " + records.getWeights());
 
 			// Build stump to generate {bestStump, error, classEst}.
 			Triple<StumpClassifier, Double, List<Integer>> stump = StumpClassifier
@@ -73,13 +73,15 @@ public class AdaBoostClassifier {
 			StumpClassifier weakClassifier = stump.first;
 			double error = stump.second;
 			List<Integer> estimatedClasses = stump.third;
-			System.out.println("estimated classes: " + estimatedClasses);
+			//System.out.println("estimated classes: " + estimatedClasses);
 
 			// Calculate alpha, throw in max(error, eps) to account for error=0.
 			double alpha = 0.5 * Math.log((1.0 - error)
 					/ Math.max(error, 1e-16));
 			// Store current weighted weak classifier.
 			weightedWeakClassifisers.add(Pair.of(alpha, weakClassifier));
+			System.out.printf("stored weak classifier #%d: (alpha=%f) %s\n", i,
+					alpha, weakClassifier.toString());
 
 			// Adjust weights of recordset for next iteration.
 			for (int j = 0; j < numRecords; j++) {
@@ -115,11 +117,10 @@ public class AdaBoostClassifier {
 						numAggregateError++;
 					}
 				}
-				System.out.println("aggregate estimated classes: "
-						+ aggregateEstimatedClasses);
+				//System.out.println("aggregate estimated classes: " + aggregateEstimatedClasses);
 
 				double errorRate = (double) numAggregateError / numRecords;
-				System.out.println("total error: " + errorRate);
+				//System.out.println("total error: " + errorRate);
 				if (errorRate == 0.0) {
 					break;
 				}

@@ -21,8 +21,10 @@ import org.apache.hadoop.mapred.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+import edu.sjsu.cs267.ml.AdaBoostClassifier;
 import edu.sjsu.cs267.tools.DataPrep;
-import edu.sjsu.cs267.tools.Record;
+import edu.sjsu.cs267.tools.RecordSet;
+import edu.sjsu.cs267.tools.WeightedRecord;
 
 public class MainDriver extends Configured implements Tool {
 
@@ -56,19 +58,23 @@ public class MainDriver extends Configured implements Tool {
 						"Mismatched number of data points.");
 			}
 
+			RecordSet records = new RecordSet(DataPrep.NUM_FEATURES);
 			for (String row : rows) {
-				Record dataRecord = new Record(row, false,
-						DataPrep.NUM_FEATURES);
-				if (dataRecord.getRelevance() == 1) {
+				WeightedRecord record = new WeightedRecord(row, false,
+						DataPrep.NUM_FEATURES, 1.0);
+				records.append(record);
+				if (record.getRelevance() == 1) {
 					reporter.incrCounter(Counters.POSITIVE_DATA_POINTS, 1);
-				} else if (dataRecord.getRelevance() == -1) {
+				} else if (record.getRelevance() == -1) {
 					reporter.incrCounter(Counters.NEGATIVE_DATA_POINTS, 1);
 				}
 				reporter.incrCounter(Counters.INPUT_DATA_POINTS, 1);
 				numRecords++;
 			}
 
-			output.collect(CONSTANT_ONE, new Text("sub_ada_boost_classifier"));
+			AdaBoostClassifier c = AdaBoostClassifier.build(records, 5, 10,
+					false);
+			output.collect(CONSTANT_ONE, new Text(c.toString()));
 
 			if ((++numRecords % 100) == 0) {
 				reporter.setStatus("Finished processing " + numRecords
@@ -85,11 +91,14 @@ public class MainDriver extends Configured implements Tool {
 				throws IOException {
 			int sum = 0;
 			while (values.hasNext()) {
-				values.next();
+				Text text = values.next();
+				output.collect(
+						CONSTANT_ONE,
+						new Text(String.format("[%d]: %s.", sum,
+								text.toString())));
 				sum++;
 			}
-			output.collect(CONSTANT_ONE,
-					new Text(String.format("Merged %d classifiers.", sum)));
+
 		}
 	}
 
@@ -102,6 +111,8 @@ public class MainDriver extends Configured implements Tool {
 		conf.setOutputValueClass(Text.class);
 
 		conf.setMapperClass(Map.class);
+		
+		conf.setNumMapTasks(20); // Just a hint.
 
 		// Set number of reduce tasks to 0 for map-only jobs.
 		// conf.setNumReduceTasks(0);

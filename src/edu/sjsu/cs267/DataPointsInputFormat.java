@@ -13,7 +13,7 @@ import org.apache.hadoop.mapred.Reporter;
 
 public class DataPointsInputFormat extends FileInputFormat<IntWritable, Text> {
 
-	private static final int SUB_DATA_SET_SIZE = 2000;
+	private static final int SUB_DATA_SET_SIZE = 1000;
 
 	@Override
 	public RecordReader<IntWritable, Text> getRecordReader(InputSplit input,
