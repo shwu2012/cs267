@@ -52,7 +52,7 @@ public class TestRanking {
 					currQuery.displayQueryDocumentRanking();
 					double idealDCG = currQuery.getIdealDCG();
 					double actualDCG = currQuery.getResultDCG();
-					double nDCG = actualDCG/idealDCG;
+					double nDCG = idealDCG > 0 ? actualDCG/idealDCG : 0;
 					double nError = currQuery.getNormalizedError();
 					System.out.println("NDCG: " + nDCG + " Normalized Error: " + nError);
 					System.out.println("\n");
